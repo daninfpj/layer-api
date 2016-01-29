@@ -82,4 +82,57 @@ describe Layer::Api::Conversations do
       end
     end
   end
+
+  describe ".get_messages" do
+    it "should retrieve all messages from a conversation" do
+      VCR.use_cassette('conversation') do
+        conversation = @layer.create_conversation(conversation_params)
+        id = @layer.get_stripped_id(conversation["id"])
+
+        @layer.send_message(id, message_params)
+
+        messages = @layer.get_messages(id)
+
+        expect(messages[0]["conversation"]["id"]).to eq(conversation["id"])
+        expect(messages[0]["parts"].count).to eq(message_params[:parts].count)
+        expect(messages[0]["sender"]["name"]).to eq(message_params[:sender][:name])
+      end
+    end
+  end
+
+  describe ".get_message" do
+    it "should retrieve a message from a conversation" do
+      VCR.use_cassette('conversation') do
+        conversation = @layer.create_conversation(conversation_params)
+        id = @layer.get_stripped_id(conversation["id"])
+
+        created_message = @layer.send_message(id, message_params)
+
+        message_id = @layer.get_message_stripped_id(created_message["id"])
+
+        message = @layer.get_message(id, message_id)
+
+        expect(message["conversation"]["id"]).to eq(conversation["id"])
+        expect(message["parts"].count).to eq(message_params[:parts].count)
+        expect(message["sender"]["name"]).to eq(message_params[:sender][:name])
+      end
+    end
+  end
+
+  describe ".delete_conversation" do
+    it "should delete a conversation" do
+      VCR.use_cassette('conversation_deleted') do
+        conversation = @layer.create_conversation(conversation_params)
+        id = @layer.get_stripped_id(conversation["id"])
+
+        response = @layer.delete_conversation(id)
+
+        expect(response).to be(nil)
+
+        expect {
+            conversation = @layer.get_conversation(id)
+          }.to raise_error(Layer::Api::Gone)
+      end
+    end
+  end
 end

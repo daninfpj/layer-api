@@ -13,6 +13,14 @@ module Layer
       def unblock_user(owner_id, user_id)
         delete("users/#{owner_id}/blocks/#{user_id}")
       end
+
+      def get_users_messages(user_id, conversation_id)
+        get("users/#{user_id}/conversations/#{conversation_id}/messages")
+      end
+
+      def get_users_message(user_id, message_id)
+        get("users/#{user_id}/messages/#{message_id}")
+      end
     end
   end
 end

@@ -74,6 +74,12 @@ operations = [
 layer.edit_conversation("conversation_id", operations)
 ```
 
+### Delete conversations
+
+```ruby
+layer.delete_conversation("conversation_id")
+```
+
 ### Sending messages
 ```ruby
 # A sample message to send
@@ -100,6 +106,20 @@ message = {
 
 layer.send_message("conversation_id", message)
 
+```
+
+### Get messages
+
+```ruby
+# Get messages from a conversation
+layer.get_messages("conversation_id")
+```
+
+### Get message
+
+```ruby
+# Get a message from a conversation
+layer.get_message("conversation_id", "message_id")
 ```
 
 ### Sending Announcements

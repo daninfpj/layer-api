@@ -39,7 +39,7 @@ module LayerHelper
   def message_params
     {
       sender: {
-          name: "t-bone"
+          user_id: "1234"
       },
       parts: [
           {

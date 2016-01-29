@@ -7,6 +7,7 @@ module Layer
         if klass =  case status
                     when 400 then Layer::Api::BadRequest
                     when 404 then Layer::Api::NotFound
+                    when 410 then Layer::Api::Gone
                     when 500..599 then Layer::Api::ServerError
                     else self
                     end
@@ -34,6 +35,7 @@ module Layer
 
     class BadRequest < Error; end
     class NotFound < Error; end
+    class Gone < Error; end
     class ServerError < Error; end
   end
 end
